@@ -1,9 +1,9 @@
 import { Module, ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
-import { AppService } from './app.service';
 import { UserService } from './users/users.service';
 import { PrismaModule } from 'nestjs-prisma';
 import { UsersController } from './users/users.controller';
+import { ContentModule } from './content/content.module';
 
 @Module({
   imports: [
@@ -13,6 +13,7 @@ import { UsersController } from './users/users.controller';
         middlewares: [],
       },
     }),
+    ContentModule,
   ],
   controllers: [UsersController],
   providers: [
@@ -20,7 +21,6 @@ import { UsersController } from './users/users.controller';
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
-    AppService,
     UserService,
   ],
 })

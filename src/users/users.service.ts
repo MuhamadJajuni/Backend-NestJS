@@ -10,7 +10,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async getAllUsers(): Promise<Prisma.UserCreateManyInput[]> {
+  async getAllUsers(): Promise<Prisma.userCreateManyInput[]> {
     return await this.prisma.user.findMany({
       where: {
         deletedAt: null,
@@ -29,8 +29,32 @@ export class UserService {
     const users = await this.prisma.user.findUnique({
       where: {
         id,
-        deletedAt: null,
       },
+      select: {
+        id: true,
+        name: true,
+        content: {
+          select: {
+            id: true,
+            title: true,
+            deletedAt: true,
+          },
+          where: {
+            deletedAt: null,
+          },
+        },
+      },
+      // include: {
+      //   content: {
+      //     where: {
+      //       deletedAt: null,
+      //     },
+      //     select: {
+      //       id: true,
+      //       title: true,
+      //     },
+      //   },
+      // },
     });
     return users;
   }
