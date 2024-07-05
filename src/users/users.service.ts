@@ -2,14 +2,12 @@
 import { Injectable, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { STATUS_CODES } from 'http';
-import { CreateUserDto, UpdateUserDto } from './dto';
-import { PrismaService } from './prisma.service';
+import { PrismaService } from 'nestjs-prisma';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
-  deleteUser(arg0: number) {
-    throw new Error('Method not implemented.');
-  }
   constructor(private prisma: PrismaService) {}
 
   async getAllUsers(): Promise<Prisma.UserCreateManyInput[]> {
@@ -31,6 +29,7 @@ export class UserService {
     const users = await this.prisma.user.findUnique({
       where: {
         id,
+        deletedAt: null,
       },
     });
     return users;
